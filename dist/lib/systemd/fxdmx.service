@@ -1,0 +1,12 @@
+[Unit]
+Description=fxDMX service
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/fxdmx start --config=/etc/fxdmx/config.yaml
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+server:
+  port: 3030
+  allowed-origins: "*"
+datastore:
+  system: /var/lib/fxdmx/db/system.db
+  retentiondays: 30
