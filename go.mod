@@ -11,6 +11,7 @@ require (
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.8.1
 	github.com/tidwall/buntdb v1.2.4
+	golang.org/x/text v0.3.6 // indirect
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gotest.tools/gotestsum v1.6.4 // indirect
