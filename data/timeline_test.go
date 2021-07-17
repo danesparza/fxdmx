@@ -67,3 +67,28 @@ func TestTimeline_AddTimeline_ValidTimeline_Successful(t *testing.T) {
 	}
 
 }
+
+func TestTimeline_AddTimeline_NoFrames_ReturnsError(t *testing.T) {
+
+	//	Arrange
+	systemdb := getTestFiles()
+
+	db, err := data.NewManager(systemdb)
+	if err != nil {
+		t.Fatalf("NewManager failed: %s", err)
+	}
+	defer func() {
+		db.Close()
+		os.RemoveAll(systemdb)
+	}()
+
+	testTimelineFrames := []data.TimeLineFrame{} // No items
+
+	//	Act
+	_, err = db.AddTimeline("unittest_timeline1", testTimelineFrames)
+
+	//	Assert
+	if err == nil {
+		t.Errorf("AddTimeline - Should return error, but got none")
+	}
+}

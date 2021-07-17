@@ -34,6 +34,12 @@ func (store Manager) AddTimeline(name string, frames []TimeLineFrame) (TimeLine,
 	//	Our return item
 	retval := TimeLine{}
 
+	//	If we don't have any frames, return an error
+	if len(frames) < 1 {
+		return retval, fmt.Errorf("frames must contain at least one item")
+	}
+
+	//	Create our new timeline
 	newTimeline := TimeLine{
 		ID:      xid.New().String(), // Generate a new id
 		Created: time.Now(),
