@@ -194,3 +194,102 @@ func TestTimeline_GetTimeline_ValidTimeline_Successful(t *testing.T) {
 		t.Errorf("GetTimeline failed: Frames don't match what I expected: %+v", gotTimeline)
 	}
 }
+
+func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
+
+	//	Arrange
+	systemdb := getTestFiles()
+
+	db, err := data.NewManager(systemdb)
+	if err != nil {
+		t.Fatalf("NewManager failed: %s", err)
+	}
+	defer func() {
+		db.Close()
+		os.RemoveAll(systemdb)
+	}()
+
+	testTimeline1 := data.Timeline{Name: "Timeline1", Frames: []data.TimelineFrame{
+		{
+			Type: "scene",
+			Channels: []data.ChannelValue{
+				{Channel: 2, Value: 255},
+				{Channel: 3, Value: 140},
+				{Channel: 4, Value: 25},
+				{Channel: 9, Value: 255},
+				{Channel: 10, Value: 140},
+				{Channel: 11, Value: 25},
+			},
+		},
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	testTimeline2 := data.Timeline{Name: "Timeline2", Frames: []data.TimelineFrame{
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	testTimeline3 := data.Timeline{Name: "Timeline3", Frames: []data.TimelineFrame{
+		{
+			Type: "scene",
+			Channels: []data.ChannelValue{
+				{Channel: 2, Value: 255},
+				{Channel: 3, Value: 140},
+				{Channel: 4, Value: 25},
+				{Channel: 9, Value: 255},
+				{Channel: 10, Value: 140},
+				{Channel: 11, Value: 25},
+			},
+		},
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	//	Act
+	db.AddTimeline(testTimeline1.Name, testTimeline1.Frames)
+	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, testTimeline2.Frames)
+	db.AddTimeline(testTimeline3.Name, testTimeline3.Frames)
+
+	gotTimelines, err := db.GetAllTimelines()
+
+	//	Assert
+	if err != nil {
+		t.Errorf("GetAllTimelines - Should get all timelines without error, but got: %s", err)
+	}
+
+	if len(gotTimelines) < 2 {
+		t.Errorf("GetAllTimelines failed: Should get all items but got: %v", len(gotTimelines))
+	}
+
+	if gotTimelines[1].Name != newTimeline2.Name {
+		t.Errorf("GetAllTimelines failed: Should get an item with the correct details: %+v", gotTimelines[1])
+	}
+}
