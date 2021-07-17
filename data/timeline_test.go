@@ -393,3 +393,105 @@ func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
 	}
 
 }
+
+func TestTimeline_DeleteTimeline_ValidTimeline_Successful(t *testing.T) {
+
+	//	Arrange
+	systemdb := getTestFiles()
+
+	db, err := data.NewManager(systemdb)
+	if err != nil {
+		t.Fatalf("NewManager failed: %s", err)
+	}
+	defer func() {
+		db.Close()
+		os.RemoveAll(systemdb)
+	}()
+
+	testTimeline1 := data.Timeline{Name: "Timeline1", Frames: []data.TimelineFrame{
+		{
+			Type: "scene",
+			Channels: []data.ChannelValue{
+				{Channel: 2, Value: 255},
+				{Channel: 3, Value: 140},
+				{Channel: 4, Value: 25},
+				{Channel: 9, Value: 255},
+				{Channel: 10, Value: 140},
+				{Channel: 11, Value: 25},
+			},
+		},
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	testTimeline2 := data.Timeline{Name: "Timeline2", Frames: []data.TimelineFrame{
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	testTimeline3 := data.Timeline{Name: "Timeline3", Frames: []data.TimelineFrame{
+		{
+			Type: "scene",
+			Channels: []data.ChannelValue{
+				{Channel: 2, Value: 255},
+				{Channel: 3, Value: 140},
+				{Channel: 4, Value: 25},
+				{Channel: 9, Value: 255},
+				{Channel: 10, Value: 140},
+				{Channel: 11, Value: 25},
+			},
+		},
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	//	Act
+	db.AddTimeline(testTimeline1.Name, testTimeline1.Frames)
+	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, testTimeline2.Frames)
+	db.AddTimeline(testTimeline3.Name, testTimeline3.Frames)
+
+	err = db.DeleteTimeline(newTimeline2.ID) //	Delete the 2nd timeline
+
+	gotTimelines, _ := db.GetAllTimelines()
+
+	//	Assert
+	if err != nil {
+		t.Errorf("DeleteTimeline - Should delete timeline without error, but got: %s", err)
+	}
+
+	if len(gotTimelines) != 2 {
+		t.Errorf("DeleteTimeline failed: Should remove an item but got: %v", len(gotTimelines))
+	}
+
+	if gotTimelines[1].Name == newTimeline2.Name {
+		t.Errorf("DeleteTimeline failed: Should get an item with different details than the removed item but got: %+v", gotTimelines[1])
+	}
+
+}
