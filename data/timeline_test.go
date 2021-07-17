@@ -293,3 +293,103 @@ func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
 		t.Errorf("GetAllTimelines failed: Should get an item with the correct details: %+v", gotTimelines[1])
 	}
 }
+
+func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
+
+	//	Arrange
+	systemdb := getTestFiles()
+
+	db, err := data.NewManager(systemdb)
+	if err != nil {
+		t.Fatalf("NewManager failed: %s", err)
+	}
+	defer func() {
+		db.Close()
+		os.RemoveAll(systemdb)
+	}()
+
+	testTimeline1 := data.Timeline{Name: "Timeline1", Frames: []data.TimelineFrame{
+		{
+			Type: "scene",
+			Channels: []data.ChannelValue{
+				{Channel: 2, Value: 255},
+				{Channel: 3, Value: 140},
+				{Channel: 4, Value: 25},
+				{Channel: 9, Value: 255},
+				{Channel: 10, Value: 140},
+				{Channel: 11, Value: 25},
+			},
+		},
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	testTimeline2 := data.Timeline{Name: "Timeline2", Frames: []data.TimelineFrame{
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	testTimeline3 := data.Timeline{Name: "Timeline3", Frames: []data.TimelineFrame{
+		{
+			Type: "scene",
+			Channels: []data.ChannelValue{
+				{Channel: 2, Value: 255},
+				{Channel: 3, Value: 140},
+				{Channel: 4, Value: 25},
+				{Channel: 9, Value: 255},
+				{Channel: 10, Value: 140},
+				{Channel: 11, Value: 25},
+			},
+		},
+		{
+			Type: "fade",
+			Channels: []data.ChannelValue{
+				{Channel: 1, Value: 255},
+				{Channel: 8, Value: 255},
+			},
+		},
+		{
+			Type:      "sleep",
+			SleepTime: 10,
+		},
+	}}
+
+	//	Act
+	db.AddTimeline(testTimeline1.Name, testTimeline1.Frames)
+	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, testTimeline2.Frames)
+	db.AddTimeline(testTimeline3.Name, testTimeline3.Frames)
+
+	//	Update the 2nd trigger:
+	newTimeline2.Enabled = false
+	_, err = db.UpdateTimeline(newTimeline2) //	Update the 2nd timeline
+
+	gotTimeline, _ := db.GetTimeline(newTimeline2.ID) // Refetch to verify
+
+	//	Assert
+	if err != nil {
+		t.Errorf("UpdateTimeline - Should update timeline without error, but got: %s", err)
+	}
+
+	if gotTimeline.Enabled != false {
+		t.Errorf("UpdateTimeline failed: Should get an item that has been disabled but got: %+v", gotTimeline)
+	}
+
+}
