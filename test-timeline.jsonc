@@ -1,0 +1,106 @@
+/* 
+    Keep a channel map at runtime.  
+    This will track (initial) state for fades.  
+    If a channel isn't in the map, assume it's value is 0 and add it to the map
+        (this will help with initial fades from zero) 
+    For fades, note the direction of the fade (is the new value greater or less than the old one?)
+*/
+{
+    "id": "",
+    "name": "",
+    "frames": [
+        {
+            "type": "scene", 
+            "channels": [         
+                /* Both lights:  White */       
+                {
+                    "channel": 2,
+                    "value": 255
+                },
+                {
+                    "channel": 3,
+                    "value": 140
+                },
+                {
+                    "channel": 4,
+                    "value": 25
+                },                
+                {
+                    "channel": 9,
+                    "value": 255
+                },
+                {
+                    "channel": 10,
+                    "value": 140
+                },
+                {
+                    "channel": 11,
+                    "value": 25
+                }
+            ]             
+        },        
+        {
+            "type": "fade", 
+            "channels": [
+                /* Fade in, because 1 and 8 haven't been set yet */
+                {
+                    "channel": 1,
+                    "value": 255
+                },
+                {
+                    "channel": 8,
+                    "value": 255
+                }
+            ]             
+        },
+        {
+            "type": "sleep", 
+            "sleeptime": 10             
+        },
+        {
+            "type": "scene", 
+            "channels": [
+                /* Light 1:  Blue */                
+                {
+                    "channel": 2,
+                    "value": 102
+                },
+                {
+                    "channel": 3,
+                    "value": 102
+                },
+                {
+                    "channel": 4,
+                    "value": 255
+                },
+                /* Light 2:  Pink */
+                {
+                    "channel": 9,
+                    "value": 255
+                },
+                {
+                    "channel": 10,
+                    "value": 51
+                },
+                {
+                    "channel": 11,
+                    "value": 221
+                }
+            ]             
+        },
+        {
+            "type": "fade", 
+            "channels": [
+                /* Fade out:  1 and 8 have been set to 255 previously */
+                {
+                    "channel": 1,
+                    "value": 0
+                },
+                {
+                    "channel": 8,
+                    "value": 0
+                }
+            ]             
+        }
+    ]
+}
