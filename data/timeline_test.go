@@ -21,7 +21,7 @@ func TestTimeline_AddTimeline_ValidTimeline_Successful(t *testing.T) {
 		os.RemoveAll(systemdb)
 	}()
 
-	testTimelineFrames := []data.TimeLineFrame{
+	testTimelineFrames := []data.TimelineFrame{
 		{
 			Type: "scene",
 			Channels: []data.ChannelValue{
@@ -82,7 +82,7 @@ func TestTimeline_AddTimeline_NoFrames_ReturnsError(t *testing.T) {
 		os.RemoveAll(systemdb)
 	}()
 
-	testTimelineFrames := []data.TimeLineFrame{} // No items
+	testTimelineFrames := []data.TimelineFrame{} // No items
 
 	//	Act
 	_, err = db.AddTimeline("unittest_timeline1", testTimelineFrames)
