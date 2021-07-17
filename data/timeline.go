@@ -28,7 +28,7 @@ type ChannelValue struct {
 	Value   byte `json:"value"`   // Optional fixture name
 }
 
-// AddTrigger adds a trigger to the system
+// AddTimeline adds a timeline to the system
 func (store Manager) AddTimeline(name string, frames []TimeLineFrame) (TimeLine, error) {
 
 	//	Our return item
@@ -67,6 +67,36 @@ func (store Manager) AddTimeline(name string, frames []TimeLineFrame) (TimeLine,
 
 	//	Set our retval:
 	retval = newTimeline
+
+	//	Return our data:
+	return retval, nil
+}
+
+// UpdateTimeline updates a timeline in the system
+func (store Manager) UpdateTimeline(updatedTimeline TimeLine) (TimeLine, error) {
+
+	//	Our return item
+	retval := TimeLine{}
+
+	//	Serialize to JSON format
+	encoded, err := json.Marshal(updatedTimeline)
+	if err != nil {
+		return retval, fmt.Errorf("problem serializing the data: %s", err)
+	}
+
+	//	Save it to the database:
+	err = store.systemdb.Update(func(tx *buntdb.Tx) error {
+		_, _, err := tx.Set(GetKey("Timeline", updatedTimeline.ID), string(encoded), &buntdb.SetOptions{})
+		return err
+	})
+
+	//	If there was an error saving the data, report it:
+	if err != nil {
+		return retval, fmt.Errorf("problem saving the timeline: %s", err)
+	}
+
+	//	Set our retval:
+	retval = updatedTimeline
 
 	//	Return our data:
 	return retval, nil
