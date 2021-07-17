@@ -174,3 +174,21 @@ func (store Manager) GetAllTimelines() ([]Timeline, error) {
 	//	Return our data:
 	return retval, nil
 }
+
+// DeleteTimeline deletes a timeline from the system
+func (store Manager) DeleteTimeline(id string) error {
+
+	//	Remove it from the database:
+	err := store.systemdb.Update(func(tx *buntdb.Tx) error {
+		_, err := tx.Delete(GetKey("Timeline", id))
+		return err
+	})
+
+	//	If there was an error removing the data, report it:
+	if err != nil {
+		return fmt.Errorf("problem removing the timeline: %s", err)
+	}
+
+	//	Return our data:
+	return nil
+}
