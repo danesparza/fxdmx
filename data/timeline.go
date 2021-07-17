@@ -101,3 +101,36 @@ func (store Manager) UpdateTimeline(updatedTimeline TimeLine) (TimeLine, error) 
 	//	Return our data:
 	return retval, nil
 }
+
+// GetTimeline gets information about a single timeline in the system based on its id
+func (store Manager) GetTimeline(id string) (TimeLine, error) {
+	//	Our return item
+	retval := TimeLine{}
+
+	//	Find the item:
+	err := store.systemdb.View(func(tx *buntdb.Tx) error {
+
+		val, err := tx.Get(GetKey("Timeline", id))
+		if err != nil {
+			return err
+		}
+
+		if len(val) > 0 {
+			//	Unmarshal data into our item
+			if err := json.Unmarshal([]byte(val), &retval); err != nil {
+				return err
+			}
+		}
+
+		//	If we get to this point and there is no error...
+		return nil
+	})
+
+	//	If there was an error, report it:
+	if err != nil {
+		return retval, fmt.Errorf("problem getting the timeline: %s", err)
+	}
+
+	//	Return our data:
+	return retval, nil
+}
