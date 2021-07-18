@@ -3,6 +3,7 @@ module github.com/danesparza/fxdmx
 go 1.16
 
 require (
+	github.com/hashicorp/logutils v1.0.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.4.3 // indirect
