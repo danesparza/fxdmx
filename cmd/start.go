@@ -13,6 +13,7 @@ import (
 
 	"github.com/danesparza/fxdmx/api"
 	"github.com/danesparza/fxdmx/data"
+	_ "github.com/danesparza/fxdmx/docs" // swagger docs location
 	"github.com/danesparza/fxdmx/event"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
