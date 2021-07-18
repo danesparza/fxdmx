@@ -1,0 +1,36 @@
+definitions:
+  api.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  api.SystemResponse:
+    properties:
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /timelines:
+    get:
+      consumes:
+      - application/json
+      description: List all timelines in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: List all timelines in the system
+      tags:
+      - triggers
+swagger: "2.0"
