@@ -115,7 +115,7 @@ func start(cmd *cobra.Command, args []string) {
 		restRouter.PathPrefix("/ui").Handler(http.StripPrefix("/ui", http.FileServer(http.Dir(viper.GetString("server.ui-dir")))))
 	}
 
-	//	AUDIO ROUTES
+	//	TIMELINE ROUTES
 	restRouter.HandleFunc("/v1/timelines", apiService.CreateTimeline).Methods("POST")  // Create a timeline
 	restRouter.HandleFunc("/v1/timelines", apiService.UpdateTimeline).Methods("PUT")   // Update a timeline
 	restRouter.HandleFunc("/v1/timelines", apiService.ListAllTimelines).Methods("GET") // List all timelines
