@@ -116,7 +116,7 @@ func start(cmd *cobra.Command, args []string) {
 	}
 
 	//	AUDIO ROUTES
-	// restRouter.HandleFunc("/v1/timelines", apiService.CreateTrigger).Methods("POST")        // Create a timeline
+	restRouter.HandleFunc("/v1/timelines", apiService.CreateTimeline).Methods("POST") // Create a timeline
 	// restRouter.HandleFunc("/v1/timelines", apiService.UpdateTrigger).Methods("PUT")         // Update a timeline
 	restRouter.HandleFunc("/v1/timelines", apiService.ListAllTimelines).Methods("GET") // List all timelines
 	// restRouter.HandleFunc("/v1/timelines/{id}", apiService.DeleteTrigger).Methods("DELETE") // Delete a timeline
