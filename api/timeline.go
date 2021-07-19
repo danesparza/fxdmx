@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/danesparza/fxdmx/event"
+	"github.com/gorilla/mux"
 )
 
 // ListAllTimelines godoc
@@ -154,6 +155,50 @@ func (service Service) UpdateTimeline(rw http.ResponseWriter, req *http.Request)
 	response := SystemResponse{
 		Message: "Timeline updated",
 		Data:    updatedTimeline,
+	}
+
+	//	Serialize to JSON & return the response:
+	rw.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(rw).Encode(response)
+}
+
+// DeleteTimeline godoc
+// @Summary Deletes a timeline in the system
+// @Description Deletes a timeline in the system
+// @Tags timelines
+// @Accept  json
+// @Produce  json
+// @Param id path string true "The timeline id to delete"
+// @Success 200 {object} api.SystemResponse
+// @Failure 400 {object} api.ErrorResponse
+// @Failure 500 {object} api.ErrorResponse
+// @Failure 503 {object} api.ErrorResponse
+// @Router /timelines/{id} [delete]
+func (service Service) DeleteTimeline(rw http.ResponseWriter, req *http.Request) {
+
+	//	Get the id from the url (if it's blank, return an error)
+	vars := mux.Vars(req)
+	if vars["id"] == "" {
+		err := fmt.Errorf("requires an id of a timeline to delete")
+		sendErrorResponse(rw, err, http.StatusBadRequest)
+		return
+	}
+
+	//	Delete the timeline
+	err := service.DB.DeleteTimeline(vars["id"])
+	if err != nil {
+		err = fmt.Errorf("error deleting timeline: %v", err)
+		sendErrorResponse(rw, err, http.StatusInternalServerError)
+		return
+	}
+
+	//	Record the event:
+	service.DB.AddEvent(event.TimelineDeleted, vars["id"], GetIP(req), service.HistoryTTL)
+
+	//	Construct our response
+	response := SystemResponse{
+		Message: "Timeline deleted",
+		Data:    vars["id"],
 	}
 
 	//	Serialize to JSON & return the response:
