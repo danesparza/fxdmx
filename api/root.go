@@ -14,6 +14,15 @@ type Service struct {
 	DB         *data.Manager
 	StartTime  time.Time
 	HistoryTTL time.Duration
+
+	// PlayTimeline signals a timeline should be played
+	PlayTimeline chan data.Timeline
+
+	// StopTimeline signals a timeline should stop playing
+	StopTimeline chan string
+
+	//	StopAllTimelines signals all timelines should stop playing
+	StopAllTimelines chan bool
 }
 
 // CreateTimelineRequest is a request to create a new timeline

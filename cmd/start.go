@@ -13,6 +13,7 @@ import (
 
 	"github.com/danesparza/fxdmx/api"
 	"github.com/danesparza/fxdmx/data"
+	"github.com/danesparza/fxdmx/dmx"
 	_ "github.com/danesparza/fxdmx/docs" // swagger docs location
 	"github.com/danesparza/fxdmx/event"
 	"github.com/gorilla/mux"
@@ -63,21 +64,22 @@ func start(cmd *cobra.Command, args []string) {
 	defer db.Close()
 
 	//	Create a background service object
-	/*
-		backgroundService := trigger.BackgroundProcess{
-			FireTrigger:   make(chan data.Trigger),
-			AddMonitor:    make(chan data.Trigger),
-			RemoveMonitor: make(chan string),
-			DB:            db,
-			HistoryTTL:    time.Duration(int(historyttl)*24) * time.Hour,
-		}
-	*/
+	backgroundService := dmx.BackgroundProcess{
+		PlayTimeline:     make(chan data.Timeline),
+		StopTimeline:     make(chan string),
+		StopAllTimelines: make(chan bool),
+		DB:               db,
+		HistoryTTL:       time.Duration(int(historyttl)*24) * time.Hour,
+	}
 
 	//	Create an api service object
 	apiService := api.Service{
-		DB:         db,
-		StartTime:  time.Now(),
-		HistoryTTL: time.Duration(int(historyttl)*24) * time.Hour,
+		PlayTimeline:     backgroundService.PlayTimeline,
+		StopTimeline:     backgroundService.StopTimeline,
+		StopAllTimelines: backgroundService.StopAllTimelines,
+		DB:               db,
+		StartTime:        time.Now(),
+		HistoryTTL:       time.Duration(int(historyttl)*24) * time.Hour,
 	}
 
 	//	Trap program exit appropriately
@@ -132,7 +134,7 @@ func start(cmd *cobra.Command, args []string) {
 
 	//	Create background processes to
 	//	- handle requests to play a timeline:
-	// go backgroundService.HandleAndProcess(ctx)
+	go backgroundService.HandleAndProcess(ctx)
 
 	//	Setup the CORS options:
 	log.Printf("[INFO] Allowed CORS origins: %s\n", viper.GetString("server.allowed-origins"))
