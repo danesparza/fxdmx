@@ -116,10 +116,10 @@ func start(cmd *cobra.Command, args []string) {
 	}
 
 	//	TIMELINE ROUTES
-	restRouter.HandleFunc("/v1/timelines", apiService.CreateTimeline).Methods("POST")  // Create a timeline
-	restRouter.HandleFunc("/v1/timelines", apiService.UpdateTimeline).Methods("PUT")   // Update a timeline
-	restRouter.HandleFunc("/v1/timelines", apiService.ListAllTimelines).Methods("GET") // List all timelines
-	// restRouter.HandleFunc("/v1/timelines/{id}", apiService.DeleteTrigger).Methods("DELETE") // Delete a timeline
+	restRouter.HandleFunc("/v1/timelines", apiService.CreateTimeline).Methods("POST")        // Create a timeline
+	restRouter.HandleFunc("/v1/timelines", apiService.UpdateTimeline).Methods("PUT")         // Update a timeline
+	restRouter.HandleFunc("/v1/timelines", apiService.ListAllTimelines).Methods("GET")       // List all timelines
+	restRouter.HandleFunc("/v1/timelines/{id}", apiService.DeleteTimeline).Methods("DELETE") // Delete a timeline
 
 	// restRouter.HandleFunc("/v1/timeline/play/{id}", apiService.FireSingleTrigger).Methods("POST") // Play a timeline
 
