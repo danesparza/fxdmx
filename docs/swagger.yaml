@@ -1,5 +1,16 @@
 basePath: /v1
 definitions:
+  api.CreateTimelineRequest:
+    properties:
+      frames:
+        description: The frame sequence to progress through
+        items:
+          $ref: '#/definitions/data.TimelineFrame'
+        type: array
+      name:
+        description: The timeline name
+        type: string
+    type: object
   api.ErrorResponse:
     properties:
       message:
@@ -10,6 +21,48 @@ definitions:
       data:
         type: object
       message:
+        type: string
+    type: object
+  api.UpdateTimelineRequest:
+    properties:
+      enabled:
+        description: Timeline enabled or not
+        type: boolean
+      frames:
+        description: The frame sequence to progress through
+        items:
+          $ref: '#/definitions/data.TimelineFrame'
+        type: array
+      id:
+        description: Unique Timeline ID
+        type: string
+      name:
+        description: The timeline name
+        type: string
+    type: object
+  data.ChannelValue:
+    properties:
+      channel:
+        description: Unique Fixture ID
+        type: integer
+      value:
+        description: Optional fixture name
+        type: integer
+    type: object
+  data.TimelineFrame:
+    properties:
+      channels:
+        description: Channel information to set for the scene (optional) Required
+          if type = scene or fade
+        items:
+          $ref: '#/definitions/data.ChannelValue'
+        type: array
+      sleeptime:
+        description: Sleep type in seconds (optional) Required if type = sleep
+        type: integer
+      type:
+        description: Timeline frame type (scene/sleep/fade) Fade 'fades' between the
+          previous channel state and this frame
         type: string
     type: object
 info:
@@ -83,5 +136,96 @@ paths:
             $ref: '#/definitions/api.ErrorResponse'
       summary: List all timelines in the system
       tags:
-      - triggers
+      - timelines
+    post:
+      consumes:
+      - application/json
+      description: Create a new timeline
+      parameters:
+      - description: The timeline to create
+        in: body
+        name: timeline
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateTimelineRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Create a new timeline
+      tags:
+      - timelines
+    put:
+      consumes:
+      - application/json
+      description: Update a timeline
+      parameters:
+      - description: The timeline to update.  Must include timeline.id
+        in: body
+        name: timeline
+        required: true
+        schema:
+          $ref: '#/definitions/api.UpdateTimelineRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Update a timeline
+      tags:
+      - timelines
+  /timelines/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a timeline in the system
+      parameters:
+      - description: The timeline id to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Deletes a timeline in the system
+      tags:
+      - timelines
 swagger: "2.0"
