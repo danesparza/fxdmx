@@ -250,7 +250,7 @@ func (service Service) RequestTimelinePlay(rw http.ResponseWriter, req *http.Req
 	//	Construct our response
 	response := SystemResponse{
 		Message: "Timeline played",
-		Data:    timeline,
+		Data:    playRequest,
 	}
 
 	//	Serialize to JSON & return the response:

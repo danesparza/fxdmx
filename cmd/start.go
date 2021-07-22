@@ -123,9 +123,9 @@ func start(cmd *cobra.Command, args []string) {
 	restRouter.HandleFunc("/v1/timelines", apiService.ListAllTimelines).Methods("GET")       // List all timelines
 	restRouter.HandleFunc("/v1/timelines/{id}", apiService.DeleteTimeline).Methods("DELETE") // Delete a timeline
 
-	restRouter.HandleFunc("/v1/timelines/play/{id}", apiService.RequestTimelinePlay).Methods("POST") // Play a timeline
-	restRouter.HandleFunc("/v1/timelines/stop/{id}", apiService.RequestTimelineStop).Methods("POST") // Stop a timeline
-	restRouter.HandleFunc("/v1/timelines/stop", apiService.RequestAllTimelinesStop).Methods("POST")  // Stop all timeline
+	restRouter.HandleFunc("/v1/timelines/play/{id}", apiService.RequestTimelinePlay).Methods("POST")  // Play a timeline
+	restRouter.HandleFunc("/v1/timelines/stop/{pid}", apiService.RequestTimelineStop).Methods("POST") // Stop a timeline
+	restRouter.HandleFunc("/v1/timelines/stop", apiService.RequestAllTimelinesStop).Methods("POST")   // Stop all timeline
 
 	//	EVENT ROUTES
 	restRouter.HandleFunc("/v1/events", apiService.GetAllEvents).Methods("GET") // List all events
