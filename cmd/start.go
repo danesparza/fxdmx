@@ -65,7 +65,7 @@ func start(cmd *cobra.Command, args []string) {
 
 	//	Create a background service object
 	backgroundService := dmx.BackgroundProcess{
-		PlayTimeline:     make(chan data.Timeline),
+		PlayTimeline:     make(chan dmx.PlayTimelineRequest),
 		StopTimeline:     make(chan string),
 		StopAllTimelines: make(chan bool),
 		DB:               db,
@@ -123,7 +123,7 @@ func start(cmd *cobra.Command, args []string) {
 	restRouter.HandleFunc("/v1/timelines", apiService.ListAllTimelines).Methods("GET")       // List all timelines
 	restRouter.HandleFunc("/v1/timelines/{id}", apiService.DeleteTimeline).Methods("DELETE") // Delete a timeline
 
-	// restRouter.HandleFunc("/v1/timeline/play/{id}", apiService.FireSingleTrigger).Methods("POST") // Play a timeline
+	restRouter.HandleFunc("/v1/timeline/play/{id}", apiService.RequestTimelinePlay).Methods("POST") // Play a timeline
 
 	//	EVENT ROUTES
 	restRouter.HandleFunc("/v1/events", apiService.GetAllEvents).Methods("GET") // List all events

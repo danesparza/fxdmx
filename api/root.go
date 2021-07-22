@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/danesparza/fxdmx/data"
+	"github.com/danesparza/fxdmx/dmx"
 )
 
 // Service encapsulates API service operations
@@ -16,7 +17,7 @@ type Service struct {
 	HistoryTTL time.Duration
 
 	// PlayTimeline signals a timeline should be played
-	PlayTimeline chan data.Timeline
+	PlayTimeline chan dmx.PlayTimelineRequest
 
 	// StopTimeline signals a timeline should stop playing
 	StopTimeline chan string

@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/danesparza/fxdmx/dmx"
 	"github.com/danesparza/fxdmx/event"
 	"github.com/gorilla/mux"
+	"github.com/rs/xid"
 )
 
 // ListAllTimelines godoc
@@ -199,6 +201,120 @@ func (service Service) DeleteTimeline(rw http.ResponseWriter, req *http.Request)
 	response := SystemResponse{
 		Message: "Timeline deleted",
 		Data:    vars["id"],
+	}
+
+	//	Serialize to JSON & return the response:
+	rw.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(rw).Encode(response)
+}
+
+// RequestTimelinePlay godoc
+// @Summary Plays a timeline in the system
+// @Description Plays a timeline in the system
+// @Tags timelines
+// @Accept  json
+// @Produce  json
+// @Param id path string true "The timeline id to play"
+// @Success 200 {object} api.SystemResponse
+// @Failure 400 {object} api.ErrorResponse
+// @Failure 500 {object} api.ErrorResponse
+// @Router /timelines/play/{id} [post]
+func (service Service) RequestTimelinePlay(rw http.ResponseWriter, req *http.Request) {
+
+	//	Get the id from the url (if it's blank, return an error)
+	vars := mux.Vars(req)
+	if vars["id"] == "" {
+		err := fmt.Errorf("requires an id of a timeline to play")
+		sendErrorResponse(rw, err, http.StatusBadRequest)
+		return
+	}
+
+	//	Get the timeline
+	timeline, err := service.DB.GetTimeline(vars["id"])
+	if err != nil {
+		err = fmt.Errorf("error getting timeline: %v", err)
+		sendErrorResponse(rw, err, http.StatusInternalServerError)
+		return
+	}
+
+	//	Send to the channel:
+	playRequest := dmx.PlayTimelineRequest{
+		ProcessID:         xid.New().String(), // Generate a new id
+		RequestedTimeline: timeline,
+	}
+	service.PlayTimeline <- playRequest
+
+	//	Record the event:
+	service.DB.AddEvent(event.TimelineStarted, fmt.Sprintf("Timeline ID: %s / Name: %s", timeline.ID, timeline.Name), GetIP(req), service.HistoryTTL)
+
+	//	Construct our response
+	response := SystemResponse{
+		Message: "Timeline played",
+		Data:    timeline,
+	}
+
+	//	Serialize to JSON & return the response:
+	rw.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(rw).Encode(response)
+}
+
+// RequestTimelineStop godoc
+// @Summary Stops a specific timeline 'play' process
+// @Description Stops a specific timeline 'play' process
+// @Tags timelines
+// @Accept  json
+// @Produce  json
+// @Param pid path string true "The process id to stop"
+// @Success 200 {object} api.SystemResponse
+// @Failure 400 {object} api.ErrorResponse
+// @Router /timeline/stop/{pid} [post]
+func (service Service) RequestTimelineStop(rw http.ResponseWriter, req *http.Request) {
+
+	//	Get the id from the url (if it's blank, return an error)
+	vars := mux.Vars(req)
+	if vars["pid"] == "" {
+		err := fmt.Errorf("requires a processid of a process to stop")
+		sendErrorResponse(rw, err, http.StatusBadRequest)
+		return
+	}
+
+	//	Send to the channel:
+	service.StopTimeline <- vars["pid"]
+
+	//	Record the event:
+	service.DB.AddEvent(event.TimelineStopped, vars["pid"], GetIP(req), service.HistoryTTL)
+
+	//	Create our response and send information back:
+	response := SystemResponse{
+		Message: "Timeline stopping",
+		Data:    vars["pid"],
+	}
+
+	//	Serialize to JSON & return the response:
+	rw.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(rw).Encode(response)
+}
+
+// RequestAllTimelinesStop godoc
+// @Summary Stops all timeline 'play' processes
+// @Description Stops all timeline 'play' processes
+// @Tags timelines
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} api.SystemResponse
+// @Router /timeline/stop [post]
+func (service Service) RequestAllTimelinesStop(rw http.ResponseWriter, req *http.Request) {
+
+	//	Send to the channel:
+	service.StopAllTimelines <- true
+
+	//	Record the event:
+	service.DB.AddEvent(event.AllTimelinesStopped, "Stop all timelines", GetIP(req), service.HistoryTTL)
+
+	//	Create our response and send information back:
+	response := SystemResponse{
+		Message: "All Timelines stopping",
+		Data:    ".",
 	}
 
 	//	Serialize to JSON & return the response:

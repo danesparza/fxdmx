@@ -16,6 +16,12 @@ const (
 	// TimelineStarted event is when a timeline sequence has been started
 	TimelineStarted = "Timeline started"
 
+	// TimelineStopped event is when a timeline sequence has been stopped
+	TimelineStopped = "Timeline stopped"
+
+	// AllTimelinesStopped event is when all timelines have been stopped
+	AllTimelinesStopped = "All Timelines stopped"
+
 	// TimelineError event is when there was an error processing a timeline
 	TimelineError = "Timeline error"
 
