@@ -196,6 +196,111 @@
                 }
             }
         },
+        "/timelines/play/{id}": {
+            "post": {
+                "description": "Plays a timeline in the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timelines"
+                ],
+                "summary": "Plays a timeline in the system",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The timeline id to play",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.SystemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/timelines/stop": {
+            "post": {
+                "description": "Stops all timeline 'play' processes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timelines"
+                ],
+                "summary": "Stops all timeline 'play' processes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.SystemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/timelines/stop/{pid}": {
+            "post": {
+                "description": "Stops a specific timeline 'play' process",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timelines"
+                ],
+                "summary": "Stops a specific timeline 'play' process",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The process id to stop",
+                        "name": "pid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.SystemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/timelines/{id}": {
             "delete": {
                 "description": "Deletes a timeline in the system",

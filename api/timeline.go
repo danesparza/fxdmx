@@ -267,7 +267,7 @@ func (service Service) RequestTimelinePlay(rw http.ResponseWriter, req *http.Req
 // @Param pid path string true "The process id to stop"
 // @Success 200 {object} api.SystemResponse
 // @Failure 400 {object} api.ErrorResponse
-// @Router /timeline/stop/{pid} [post]
+// @Router /timelines/stop/{pid} [post]
 func (service Service) RequestTimelineStop(rw http.ResponseWriter, req *http.Request) {
 
 	//	Get the id from the url (if it's blank, return an error)
@@ -302,7 +302,7 @@ func (service Service) RequestTimelineStop(rw http.ResponseWriter, req *http.Req
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} api.SystemResponse
-// @Router /timeline/stop [post]
+// @Router /timelines/stop [post]
 func (service Service) RequestAllTimelinesStop(rw http.ResponseWriter, req *http.Request) {
 
 	//	Send to the channel:

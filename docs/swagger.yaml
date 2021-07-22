@@ -228,4 +228,73 @@ paths:
       summary: Deletes a timeline in the system
       tags:
       - timelines
+  /timelines/play/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Plays a timeline in the system
+      parameters:
+      - description: The timeline id to play
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Plays a timeline in the system
+      tags:
+      - timelines
+  /timelines/stop:
+    post:
+      consumes:
+      - application/json
+      description: Stops all timeline 'play' processes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+      summary: Stops all timeline 'play' processes
+      tags:
+      - timelines
+  /timelines/stop/{pid}:
+    post:
+      consumes:
+      - application/json
+      description: Stops a specific timeline 'play' process
+      parameters:
+      - description: The process id to stop
+        in: path
+        name: pid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Stops a specific timeline 'play' process
+      tags:
+      - timelines
 swagger: "2.0"
