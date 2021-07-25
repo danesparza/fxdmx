@@ -118,6 +118,25 @@ paths:
       summary: Gets all events in the system
       tags:
       - events
+  /system/usbinfo:
+    get:
+      consumes:
+      - application/json
+      description: Gets information about currently connected USB serial devices
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Gets information about currently connected USB serial devices
+      tags:
+      - system
   /timelines:
     get:
       consumes:

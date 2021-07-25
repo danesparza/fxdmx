@@ -95,6 +95,35 @@ var doc = `{
                 }
             }
         },
+        "/system/usbinfo": {
+            "get": {
+                "description": "Gets information about currently connected USB serial devices",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system"
+                ],
+                "summary": "Gets information about currently connected USB serial devices",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.SystemResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/timelines": {
             "get": {
                 "description": "List all timelines in the system",
