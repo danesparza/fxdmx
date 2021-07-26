@@ -22,7 +22,7 @@ You can then use the service at http://localhost:3040
 See the REST API documentation at http://localhost:3040/v1/swagger/
 
 ## Setup
-There is one very simple setup step you should probably do:  Setting the default serial USB device.  You can see all the USB serial devices installed by using the REST service call `/v1/system/usbinfo`.  On my test Raspberry Pi, here's what this looks like when I run curl:
+After plugging in your hardware, there is one very simple setup step you should probably do:  Setting the default serial USB device.  You can see all the USB serial devices installed by using the REST service call `/v1/system/usbinfo`.  On my test Raspberry Pi, here's what this looks like when I run curl:
 
 Request:
 ```bash
