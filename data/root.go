@@ -32,6 +32,7 @@ func NewManager(systemdbpath string) (*Manager, error) {
 	//	Create our indexes
 	sysdb.CreateIndex("Event", "Event:*", buntdb.IndexString)
 	sysdb.CreateIndex("Timeline", "Timeline:*", buntdb.IndexString)
+	sysdb.CreateIndex("Config", "Config:*", buntdb.IndexString)
 
 	//	Return our Manager reference
 	return retval, nil
