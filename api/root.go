@@ -40,6 +40,11 @@ type UpdateTimelineRequest struct {
 	Frames  []data.TimelineFrame `json:"frames"`  // The frame sequence to progress through
 }
 
+// UpdateDefaultUSBRequest is a request to update the default USB device to use
+type UpdateDefaultUSBRequest struct {
+	DevicePath string `json:"devicepath"` // Unique USB device path
+}
+
 // SystemResponse is a response for a system request
 type SystemResponse struct {
 	Message string      `json:"message"`

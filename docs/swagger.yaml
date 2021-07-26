@@ -23,6 +23,12 @@ definitions:
       message:
         type: string
     type: object
+  api.UpdateDefaultUSBRequest:
+    properties:
+      devicepath:
+        description: Unique USB device path
+        type: string
+    type: object
   api.UpdateTimelineRequest:
     properties:
       enabled:
@@ -118,6 +124,54 @@ paths:
       summary: Gets all events in the system
       tags:
       - events
+  /system/defaultusb:
+    get:
+      consumes:
+      - application/json
+      description: Get the current default USB device
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Get the current default USB device
+      tags:
+      - system
+    put:
+      consumes:
+      - application/json
+      description: Update the default USB device
+      parameters:
+      - description: 'The device path to use.  Example: /dev/ttyUSB0'
+        in: body
+        name: timeline
+        required: true
+        schema:
+          $ref: '#/definitions/api.UpdateDefaultUSBRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.SystemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Update the default USB device
+      tags:
+      - system
   /system/usbinfo:
     get:
       consumes:

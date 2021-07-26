@@ -25,6 +25,9 @@ const (
 	// TimelineError event is when there was an error processing a timeline
 	TimelineError = "Timeline error"
 
+	// ConfigUpdated event is when the system configuration has been updated (specifically the default usb device has been udpated)
+	ConfigUpdated = "Config updated"
+
 	// SystemShutdown event is when the system is shutting down
 	SystemShutdown = "System Shutdown"
 )

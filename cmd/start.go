@@ -128,7 +128,9 @@ func start(cmd *cobra.Command, args []string) {
 	restRouter.HandleFunc("/v1/timelines/stop", apiService.RequestAllTimelinesStop).Methods("POST")   // Stop all timeline
 
 	//	SYSTEM ROUTES
-	restRouter.HandleFunc("/v1/system/usbinfo", apiService.GetSerialUSBDevices).Methods("GET") // List all serial USB devices
+	restRouter.HandleFunc("/v1/system/usbinfo", apiService.GetSerialUSBDevices).Methods("GET")    // List all serial USB devices
+	restRouter.HandleFunc("/v1/system/defaultusb", apiService.GetDefaultUSBDev).Methods("GET")    // Get the default serial USB device
+	restRouter.HandleFunc("/v1/system/defaultusb", apiService.UpdateDefaultUSBDev).Methods("PUT") // Set the default serial USB device
 
 	//	EVENT ROUTES
 	restRouter.HandleFunc("/v1/events", apiService.GetAllEvents).Methods("GET") // List all events
