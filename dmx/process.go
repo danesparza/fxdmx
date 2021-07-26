@@ -3,7 +3,6 @@ package dmx
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 	"sync"
 	"time"
@@ -65,7 +64,7 @@ func (bp *BackgroundProcess) HandleAndProcess(systemctx context.Context) {
 				//	Call the context cancellation function
 				playCancel()
 
-				log.Printf("Stopped timeline process %v\n", stopTL)
+				bp.DB.AddEvent(event.TimelineStopped, fmt.Sprintf("Stopped timeline process %v\n", stopTL), "", bp.HistoryTTL)
 
 				//	Remove ourselves from the map and exit
 				delete(bp.PlayingTimelines.m, stopTL)
@@ -77,7 +76,7 @@ func (bp *BackgroundProcess) HandleAndProcess(systemctx context.Context) {
 			//	Loop through all items in the map and call cancel if the item exists (critical section):
 			bp.PlayingTimelines.rwMutex.Lock()
 
-			log.Printf("Stopping all timeline processes\n")
+			bp.DB.AddEvent(event.AllTimelinesStopped, "Stopping all timeline processes", "", bp.HistoryTTL)
 
 			for stopTL, playCancel := range bp.PlayingTimelines.m {
 
@@ -93,7 +92,7 @@ func (bp *BackgroundProcess) HandleAndProcess(systemctx context.Context) {
 			bp.PlayingTimelines.rwMutex.Unlock()
 
 		case <-systemctx.Done():
-			fmt.Println("Stopping timeline processor")
+			bp.DB.AddEvent(event.AllTimelinesStopped, "Stopping timeline processor", "", bp.HistoryTTL)
 			return
 		}
 	}
@@ -114,7 +113,7 @@ func (bp *BackgroundProcess) StartTimelinePlay(cx context.Context, req PlayTimel
 	bp.PlayingTimelines.rwMutex.Unlock()
 
 	//	Process the timeline
-	log.Printf("Processing timeline %v\n", req.ProcessID)
+	bp.DB.AddEvent(event.TimelineStarted, fmt.Sprintf("Processing timeline %v\n", req.ProcessID), "", bp.HistoryTTL)
 
 	//	First, see if the timeline has a device set on it.
 	if strings.TrimSpace(req.RequestedTimeline.USBDevicePath) == "" {
@@ -131,7 +130,7 @@ func (bp *BackgroundProcess) StartTimelinePlay(cx context.Context, req PlayTimel
 	// Connect to the DMX controller.
 	dmx, e := dmx.NewDMXConnection(req.RequestedTimeline.USBDevicePath)
 	if e != nil {
-		log.Printf("ERROR: Unable to connect to DMX512 interface %v: %v", req.RequestedTimeline.USBDevicePath, e)
+		bp.DB.AddEvent(event.TimelineStarted, fmt.Sprintf("ERROR: Unable to connect to DMX512 interface %v: %v", req.RequestedTimeline.USBDevicePath, e), "", bp.HistoryTTL)
 		return
 	}
 	defer dmx.Close()
@@ -189,7 +188,6 @@ func (bp *BackgroundProcess) StartTimelinePlay(cx context.Context, req PlayTimel
 									dmx.SetChannel(channelInfo.Channel, byte(i))
 									dmx.Render()
 								case <-ctx.Done():
-									log.Println("Stopping from fadeup!")
 									return
 								}
 							}
@@ -201,7 +199,6 @@ func (bp *BackgroundProcess) StartTimelinePlay(cx context.Context, req PlayTimel
 									dmx.SetChannel(channelInfo.Channel, byte(i))
 									dmx.Render()
 								case <-ctx.Done():
-									log.Println("Stopping from fadedown!")
 									return
 								}
 							}
@@ -225,14 +222,12 @@ func (bp *BackgroundProcess) StartTimelinePlay(cx context.Context, req PlayTimel
 				case <-time.After(time.Duration(frame.SleepTime) * time.Second):
 					continue
 				case <-ctx.Done():
-					log.Println("Stopping from sleep!")
 					return
 				}
 			}
 
 		case <-ctx.Done():
 			// stop
-			log.Println("Stopping in main loop!")
 			return
 		}
 	}
