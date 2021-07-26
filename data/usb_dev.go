@@ -2,10 +2,8 @@ package data
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
-	"github.com/danesparza/fxdmx/system"
 	"github.com/tidwall/buntdb"
 )
 
@@ -62,24 +60,6 @@ func (store Manager) GetDefaultUSBDev() (string, error) {
 		//	If we get to this point and there is no error...
 		return nil
 	})
-
-	//	We couldn't find the default, so try to get all devices present and set it to the first one found...
-	if errors.Is(err, buntdb.ErrNotFound) {
-		devs, err := system.GetSerialUSBDeviceInfo()
-		if err != nil {
-			return retval, fmt.Errorf("error getting attempting to get USB devices to set the default: %v", err)
-		}
-
-		//	If devices exist
-		if len(devs) > 0 {
-			//	Grab the first and set it to the default.  Return it.
-			retval, err = store.UpdateDefaultUSBDev(devs[0].DevicePath)
-
-			if err != nil {
-				return retval, fmt.Errorf("error attempting to set the default device: %v", err)
-			}
-		}
-	}
 
 	//	If there was an error, report it:
 	if err != nil {
