@@ -10,17 +10,18 @@ import (
 )
 
 type Timeline struct {
-	ID      string          `json:"id"`      // Unique Timeline ID
-	Enabled bool            `json:"enabled"` // Timeline enabled or not
-	Created time.Time       `json:"created"` // Timeline create time
-	Name    string          `json:"name"`    // Scene name
-	Frames  []TimelineFrame `json:"frames"`  // Frames for the timeline
+	ID            string          `json:"id"`                // Unique Timeline ID
+	Enabled       bool            `json:"enabled"`           // Timeline enabled or not
+	Created       time.Time       `json:"created"`           // Timeline create time
+	Name          string          `json:"name"`              // Timeline name
+	USBDevicePath string          `json:"devpath,omitempty"` // The USB device to play the timeline on.  Optional.  If not set, uses the default
+	Frames        []TimelineFrame `json:"frames"`            // Frames for the timeline
 }
 
 type TimelineFrame struct {
-	Type      string         `json:"type"`      // Timeline frame type (scene/sleep/fade) Fade 'fades' between the previous channel state and this frame
-	Channels  []ChannelValue `json:"channels"`  // Channel information to set for the scene (optional) Required if type = scene or fade
-	SleepTime int            `json:"sleeptime"` // Sleep type in seconds (optional) Required if type = sleep
+	Type      string         `json:"type"`               // Timeline frame type (scene/sleep/fade) Fade 'fades' between the previous channel state and this frame
+	Channels  []ChannelValue `json:"channels,omitempty"` // Channel information to set for the scene (optional) Required if type = scene or fade
+	SleepTime int            `json:"sleeptime"`          // Sleep type in seconds (optional) Required if type = sleep
 }
 
 type ChannelValue struct {
