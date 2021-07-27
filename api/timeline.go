@@ -73,7 +73,7 @@ func (service Service) CreateTimeline(rw http.ResponseWriter, req *http.Request)
 	}
 
 	//	Create the new timeline:
-	newTimeline, err := service.DB.AddTimeline(request.Name, request.Frames)
+	newTimeline, err := service.DB.AddTimeline(request.Name, request.USBDevicePath, request.Frames)
 	if err != nil {
 		sendErrorResponse(rw, err, http.StatusInternalServerError)
 		return
@@ -133,6 +133,11 @@ func (service Service) UpdateTimeline(rw http.ResponseWriter, req *http.Request)
 	//	Only update the name if it's been passed
 	if strings.TrimSpace(request.Name) != "" {
 		timeUpdate.Name = request.Name
+	}
+
+	//	Only update the usb dev path if it's been passed
+	if strings.TrimSpace(request.USBDevicePath) != "" {
+		timeUpdate.USBDevicePath = request.USBDevicePath
 	}
 
 	//	Enabled / disabled is always set

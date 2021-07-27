@@ -28,16 +28,18 @@ type Service struct {
 
 // CreateTimelineRequest is a request to create a new timeline
 type CreateTimelineRequest struct {
-	Name   string               `json:"name"`   // The timeline name
-	Frames []data.TimelineFrame `json:"frames"` // The frame sequence to progress through
+	Name          string               `json:"name"`    // The timeline name
+	USBDevicePath string               `json:"devpath"` // The usb device path to use for this timeline
+	Frames        []data.TimelineFrame `json:"frames"`  // The frame sequence to progress through
 }
 
 // UpdateTimelineRequest is a request to update a timeline
 type UpdateTimelineRequest struct {
-	ID      string               `json:"id"`      // Unique Timeline ID
-	Enabled bool                 `json:"enabled"` // Timeline enabled or not
-	Name    string               `json:"name"`    // The timeline name
-	Frames  []data.TimelineFrame `json:"frames"`  // The frame sequence to progress through
+	ID            string               `json:"id"`      // Unique Timeline ID
+	Enabled       bool                 `json:"enabled"` // Timeline enabled or not
+	Name          string               `json:"name"`    // The timeline name
+	USBDevicePath string               `json:"devpath"` // The usb device path to use for this timeline
+	Frames        []data.TimelineFrame `json:"frames"`  // The frame sequence to progress through
 }
 
 // UpdateDefaultUSBRequest is a request to update the default USB device to use

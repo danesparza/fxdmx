@@ -30,7 +30,7 @@ type ChannelValue struct {
 }
 
 // AddTimeline adds a timeline to the system
-func (store Manager) AddTimeline(name string, frames []TimelineFrame) (Timeline, error) {
+func (store Manager) AddTimeline(name, devpath string, frames []TimelineFrame) (Timeline, error) {
 
 	//	Our return item
 	retval := Timeline{}

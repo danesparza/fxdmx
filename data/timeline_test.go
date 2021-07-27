@@ -47,7 +47,7 @@ func TestTimeline_AddTimeline_ValidTimeline_Successful(t *testing.T) {
 	}
 
 	//	Act
-	newTimeline, err := db.AddTimeline("unittest_timeline1", testTimelineFrames)
+	newTimeline, err := db.AddTimeline("unittest_timeline1", "", testTimelineFrames)
 
 	//	Assert
 	if err != nil {
@@ -85,7 +85,7 @@ func TestTimeline_AddTimeline_NoFrames_ReturnsError(t *testing.T) {
 	testTimelineFrames := []data.TimelineFrame{} // No items
 
 	//	Act
-	_, err = db.AddTimeline("unittest_timeline1", testTimelineFrames)
+	_, err = db.AddTimeline("unittest_timeline1", "", testTimelineFrames)
 
 	//	Assert
 	if err == nil {
@@ -172,9 +172,9 @@ func TestTimeline_GetTimeline_ValidTimeline_Successful(t *testing.T) {
 	}}
 
 	//	Act
-	db.AddTimeline(testTimeline1.Name, testTimeline1.Frames)
-	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, testTimeline2.Frames)
-	db.AddTimeline(testTimeline3.Name, testTimeline3.Frames)
+	db.AddTimeline(testTimeline1.Name, "", testTimeline1.Frames)
+	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, "", testTimeline2.Frames)
+	db.AddTimeline(testTimeline3.Name, "", testTimeline3.Frames)
 
 	gotTimeline, err := db.GetTimeline(newTimeline2.ID)
 
@@ -274,9 +274,9 @@ func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
 	}}
 
 	//	Act
-	db.AddTimeline(testTimeline1.Name, testTimeline1.Frames)
-	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, testTimeline2.Frames)
-	db.AddTimeline(testTimeline3.Name, testTimeline3.Frames)
+	db.AddTimeline(testTimeline1.Name, "", testTimeline1.Frames)
+	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, "", testTimeline2.Frames)
+	db.AddTimeline(testTimeline3.Name, "", testTimeline3.Frames)
 
 	gotTimelines, err := db.GetAllTimelines()
 
@@ -373,9 +373,9 @@ func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
 	}}
 
 	//	Act
-	db.AddTimeline(testTimeline1.Name, testTimeline1.Frames)
-	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, testTimeline2.Frames)
-	db.AddTimeline(testTimeline3.Name, testTimeline3.Frames)
+	db.AddTimeline(testTimeline1.Name, "", testTimeline1.Frames)
+	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, "", testTimeline2.Frames)
+	db.AddTimeline(testTimeline3.Name, "", testTimeline3.Frames)
 
 	//	Update the 2nd trigger:
 	newTimeline2.Enabled = false
@@ -473,9 +473,9 @@ func TestTimeline_DeleteTimeline_ValidTimeline_Successful(t *testing.T) {
 	}}
 
 	//	Act
-	db.AddTimeline(testTimeline1.Name, testTimeline1.Frames)
-	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, testTimeline2.Frames)
-	db.AddTimeline(testTimeline3.Name, testTimeline3.Frames)
+	db.AddTimeline(testTimeline1.Name, "", testTimeline1.Frames)
+	newTimeline2, _ := db.AddTimeline(testTimeline2.Name, "", testTimeline2.Frames)
+	db.AddTimeline(testTimeline3.Name, "", testTimeline3.Frames)
 
 	err = db.DeleteTimeline(newTimeline2.ID) //	Delete the 2nd timeline
 
