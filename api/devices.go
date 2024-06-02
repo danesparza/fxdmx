@@ -3,11 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/danesparza/fxdmx/internal/event"
+	"github.com/danesparza/fxdmx/internal/system"
 	"net/http"
 	"strings"
-
-	"github.com/danesparza/fxdmx/event"
-	"github.com/danesparza/fxdmx/system"
 )
 
 // GetSerialUSBDevices godoc

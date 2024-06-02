@@ -1,10 +1,9 @@
 package data_test
 
 import (
+	data2 "github.com/danesparza/fxdmx/internal/data"
 	"os"
 	"testing"
-
-	"github.com/danesparza/fxdmx/data"
 )
 
 func TestTimeline_AddTimeline_ValidTimeline_Successful(t *testing.T) {
@@ -12,7 +11,7 @@ func TestTimeline_AddTimeline_ValidTimeline_Successful(t *testing.T) {
 	//	Arrange
 	systemdb := getTestFiles()
 
-	db, err := data.NewManager(systemdb)
+	db, err := data2.NewManager(systemdb)
 	if err != nil {
 		t.Fatalf("NewManager failed: %s", err)
 	}
@@ -21,10 +20,10 @@ func TestTimeline_AddTimeline_ValidTimeline_Successful(t *testing.T) {
 		os.RemoveAll(systemdb)
 	}()
 
-	testTimelineFrames := []data.TimelineFrame{
+	testTimelineFrames := []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -35,7 +34,7 @@ func TestTimeline_AddTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -73,7 +72,7 @@ func TestTimeline_AddTimeline_NoFrames_ReturnsError(t *testing.T) {
 	//	Arrange
 	systemdb := getTestFiles()
 
-	db, err := data.NewManager(systemdb)
+	db, err := data2.NewManager(systemdb)
 	if err != nil {
 		t.Fatalf("NewManager failed: %s", err)
 	}
@@ -82,7 +81,7 @@ func TestTimeline_AddTimeline_NoFrames_ReturnsError(t *testing.T) {
 		os.RemoveAll(systemdb)
 	}()
 
-	testTimelineFrames := []data.TimelineFrame{} // No items
+	testTimelineFrames := []data2.TimelineFrame{} // No items
 
 	//	Act
 	_, err = db.AddTimeline("unittest_timeline1", "", testTimelineFrames)
@@ -98,7 +97,7 @@ func TestTimeline_GetTimeline_ValidTimeline_Successful(t *testing.T) {
 	//	Arrange
 	systemdb := getTestFiles()
 
-	db, err := data.NewManager(systemdb)
+	db, err := data2.NewManager(systemdb)
 	if err != nil {
 		t.Fatalf("NewManager failed: %s", err)
 	}
@@ -107,10 +106,10 @@ func TestTimeline_GetTimeline_ValidTimeline_Successful(t *testing.T) {
 		os.RemoveAll(systemdb)
 	}()
 
-	testTimeline1 := data.Timeline{Name: "Timeline1", Frames: []data.TimelineFrame{
+	testTimeline1 := data2.Timeline{Name: "Timeline1", Frames: []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -121,7 +120,7 @@ func TestTimeline_GetTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -132,10 +131,10 @@ func TestTimeline_GetTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 	}}
 
-	testTimeline2 := data.Timeline{Name: "Timeline2", Frames: []data.TimelineFrame{
+	testTimeline2 := data2.Timeline{Name: "Timeline2", Frames: []data2.TimelineFrame{
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -146,10 +145,10 @@ func TestTimeline_GetTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 	}}
 
-	testTimeline3 := data.Timeline{Name: "Timeline3", Frames: []data.TimelineFrame{
+	testTimeline3 := data2.Timeline{Name: "Timeline3", Frames: []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -160,7 +159,7 @@ func TestTimeline_GetTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -200,7 +199,7 @@ func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
 	//	Arrange
 	systemdb := getTestFiles()
 
-	db, err := data.NewManager(systemdb)
+	db, err := data2.NewManager(systemdb)
 	if err != nil {
 		t.Fatalf("NewManager failed: %s", err)
 	}
@@ -209,10 +208,10 @@ func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
 		os.RemoveAll(systemdb)
 	}()
 
-	testTimeline1 := data.Timeline{Name: "Timeline1", Frames: []data.TimelineFrame{
+	testTimeline1 := data2.Timeline{Name: "Timeline1", Frames: []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -223,7 +222,7 @@ func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -234,10 +233,10 @@ func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
 		},
 	}}
 
-	testTimeline2 := data.Timeline{Name: "Timeline2", Frames: []data.TimelineFrame{
+	testTimeline2 := data2.Timeline{Name: "Timeline2", Frames: []data2.TimelineFrame{
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -248,10 +247,10 @@ func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
 		},
 	}}
 
-	testTimeline3 := data.Timeline{Name: "Timeline3", Frames: []data.TimelineFrame{
+	testTimeline3 := data2.Timeline{Name: "Timeline3", Frames: []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -262,7 +261,7 @@ func TestTimeline_GetAllTimelines_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -299,7 +298,7 @@ func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
 	//	Arrange
 	systemdb := getTestFiles()
 
-	db, err := data.NewManager(systemdb)
+	db, err := data2.NewManager(systemdb)
 	if err != nil {
 		t.Fatalf("NewManager failed: %s", err)
 	}
@@ -308,10 +307,10 @@ func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
 		os.RemoveAll(systemdb)
 	}()
 
-	testTimeline1 := data.Timeline{Name: "Timeline1", Frames: []data.TimelineFrame{
+	testTimeline1 := data2.Timeline{Name: "Timeline1", Frames: []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -322,7 +321,7 @@ func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -333,10 +332,10 @@ func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
 		},
 	}}
 
-	testTimeline2 := data.Timeline{Name: "Timeline2", Frames: []data.TimelineFrame{
+	testTimeline2 := data2.Timeline{Name: "Timeline2", Frames: []data2.TimelineFrame{
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -347,10 +346,10 @@ func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
 		},
 	}}
 
-	testTimeline3 := data.Timeline{Name: "Timeline3", Frames: []data.TimelineFrame{
+	testTimeline3 := data2.Timeline{Name: "Timeline3", Frames: []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -361,7 +360,7 @@ func TestTimeline_UpdateTimeline_ValidTimelines_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -399,7 +398,7 @@ func TestTimeline_DeleteTimeline_ValidTimeline_Successful(t *testing.T) {
 	//	Arrange
 	systemdb := getTestFiles()
 
-	db, err := data.NewManager(systemdb)
+	db, err := data2.NewManager(systemdb)
 	if err != nil {
 		t.Fatalf("NewManager failed: %s", err)
 	}
@@ -408,10 +407,10 @@ func TestTimeline_DeleteTimeline_ValidTimeline_Successful(t *testing.T) {
 		os.RemoveAll(systemdb)
 	}()
 
-	testTimeline1 := data.Timeline{Name: "Timeline1", Frames: []data.TimelineFrame{
+	testTimeline1 := data2.Timeline{Name: "Timeline1", Frames: []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -422,7 +421,7 @@ func TestTimeline_DeleteTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -433,10 +432,10 @@ func TestTimeline_DeleteTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 	}}
 
-	testTimeline2 := data.Timeline{Name: "Timeline2", Frames: []data.TimelineFrame{
+	testTimeline2 := data2.Timeline{Name: "Timeline2", Frames: []data2.TimelineFrame{
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},
@@ -447,10 +446,10 @@ func TestTimeline_DeleteTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 	}}
 
-	testTimeline3 := data.Timeline{Name: "Timeline3", Frames: []data.TimelineFrame{
+	testTimeline3 := data2.Timeline{Name: "Timeline3", Frames: []data2.TimelineFrame{
 		{
 			Type: "scene",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 2, Value: 255},
 				{Channel: 3, Value: 140},
 				{Channel: 4, Value: 25},
@@ -461,7 +460,7 @@ func TestTimeline_DeleteTimeline_ValidTimeline_Successful(t *testing.T) {
 		},
 		{
 			Type: "fade",
-			Channels: []data.ChannelValue{
+			Channels: []data2.ChannelValue{
 				{Channel: 1, Value: 255},
 				{Channel: 8, Value: 255},
 			},

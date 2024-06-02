@@ -3,16 +3,15 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	data2 "github.com/danesparza/fxdmx/internal/data"
+	"github.com/danesparza/fxdmx/internal/dmx"
 	"net/http"
 	"time"
-
-	"github.com/danesparza/fxdmx/data"
-	"github.com/danesparza/fxdmx/dmx"
 )
 
 // Service encapsulates API service operations
 type Service struct {
-	DB         *data.Manager
+	DB         *data2.Manager
 	StartTime  time.Time
 	HistoryTTL time.Duration
 
@@ -28,18 +27,18 @@ type Service struct {
 
 // CreateTimelineRequest is a request to create a new timeline
 type CreateTimelineRequest struct {
-	Name          string               `json:"name"`    // The timeline name
-	USBDevicePath string               `json:"devpath"` // The usb device path to use for this timeline
-	Frames        []data.TimelineFrame `json:"frames"`  // The frame sequence to progress through
+	Name          string                `json:"name"`    // The timeline name
+	USBDevicePath string                `json:"devpath"` // The usb device path to use for this timeline
+	Frames        []data2.TimelineFrame `json:"frames"`  // The frame sequence to progress through
 }
 
 // UpdateTimelineRequest is a request to update a timeline
 type UpdateTimelineRequest struct {
-	ID            string               `json:"id"`      // Unique Timeline ID
-	Enabled       bool                 `json:"enabled"` // Timeline enabled or not
-	Name          string               `json:"name"`    // The timeline name
-	USBDevicePath string               `json:"devpath"` // The usb device path to use for this timeline
-	Frames        []data.TimelineFrame `json:"frames"`  // The frame sequence to progress through
+	ID            string                `json:"id"`      // Unique Timeline ID
+	Enabled       bool                  `json:"enabled"` // Timeline enabled or not
+	Name          string                `json:"name"`    // The timeline name
+	USBDevicePath string                `json:"devpath"` // The usb device path to use for this timeline
+	Frames        []data2.TimelineFrame `json:"frames"`  // The frame sequence to progress through
 }
 
 // UpdateDefaultUSBRequest is a request to update the default USB device to use
@@ -58,7 +57,7 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
-//	Used to send back an error:
+// Used to send back an error:
 func sendErrorResponse(rw http.ResponseWriter, err error, code int) {
 	//	Our return value
 	response := ErrorResponse{

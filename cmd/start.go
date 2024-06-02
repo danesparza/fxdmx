@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"context"
+	"github.com/danesparza/fxdmx/internal/data"
+	"github.com/danesparza/fxdmx/internal/dmx"
+	"github.com/danesparza/fxdmx/internal/event"
 	"log"
 	"net/http"
 	"os"
@@ -12,10 +15,7 @@ import (
 	"time"
 
 	"github.com/danesparza/fxdmx/api"
-	"github.com/danesparza/fxdmx/data"
-	"github.com/danesparza/fxdmx/dmx"
 	_ "github.com/danesparza/fxdmx/docs" // swagger docs location
-	"github.com/danesparza/fxdmx/event"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"github.com/spf13/cobra"

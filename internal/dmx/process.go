@@ -3,18 +3,18 @@ package dmx
 import (
 	"context"
 	"fmt"
+	data2 "github.com/danesparza/fxdmx/internal/data"
+	"github.com/danesparza/fxdmx/internal/event"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/akualab/dmx"
-	"github.com/danesparza/fxdmx/data"
-	"github.com/danesparza/fxdmx/event"
 )
 
 type PlayTimelineRequest struct {
 	ProcessID         string
-	RequestedTimeline data.Timeline
+	RequestedTimeline data2.Timeline
 }
 
 type timelineProcessMap struct {
@@ -24,7 +24,7 @@ type timelineProcessMap struct {
 
 // BackgroundProcess encapsulates background processing operations
 type BackgroundProcess struct {
-	DB         *data.Manager
+	DB         *data2.Manager
 	HistoryTTL time.Duration
 
 	// PlayTimeline signals a timeline should be played
@@ -174,7 +174,7 @@ func (bp *BackgroundProcess) StartTimelinePlay(cx context.Context, req PlayTimel
 						ivalue = 0
 					}
 
-					go func(channelInfo data.ChannelValue, initialValue byte) {
+					go func(channelInfo data2.ChannelValue, initialValue byte) {
 						// Decrement the counter when the goroutine completes.
 						defer wg.Done()
 

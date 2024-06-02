@@ -3,11 +3,11 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/danesparza/fxdmx/internal/dmx"
+	"github.com/danesparza/fxdmx/internal/event"
 	"net/http"
 	"strings"
 
-	"github.com/danesparza/fxdmx/dmx"
-	"github.com/danesparza/fxdmx/event"
 	"github.com/gorilla/mux"
 	"github.com/rs/xid"
 )
