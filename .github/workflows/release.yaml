@@ -77,7 +77,7 @@ jobs:
         run: go mod download
 
       - name: Create binaries for all platforms
-        run: mkdir -p /tmp/binaries; gox -osarch="linux/arm darwin/amd64" -ldflags "-X ${PACKAGE_PATH}/version.BuildNumber=${GITHUB_RUN_NUMBER} -X ${PACKAGE_PATH}/version.CommitID=${GITHUB_SHA} -X '${PACKAGE_PATH}/version.Prerelease=-'" -output "/tmp/binaries/${APP_NAME}_{{.OS}}_{{.Arch}}" $PACKAGE_PATH/...
+        run: mkdir -p /tmp/binaries; gox -osarch="linux/arm" -ldflags "-X ${PACKAGE_PATH}/version.BuildNumber=${GITHUB_RUN_NUMBER} -X ${PACKAGE_PATH}/version.CommitID=${GITHUB_SHA} -X '${PACKAGE_PATH}/version.Prerelease=-'" -output "/tmp/binaries/${APP_NAME}_{{.OS}}_{{.Arch}}" $PACKAGE_PATH/...
 
       - name: Copy migration scripts
         run: cp ./scripts/sqlite/migrations/*.sql ./dist/var/lib/fxdmx/scripts/sqlite/migrations
