@@ -4,18 +4,23 @@ REST service for DMX fixture control from Raspberry Pi.
 Control [lights](https://www.rollingstone.com/product-recommendations/lifestyle/best-stage-lights-928544/), [fog machines](https://www.amazon.com/dmx-fog-machine/s?k=dmx+fog+machine), [relays](https://www.amazon.com/ADJ-Products-Lighting-Dimmer-DP-415R/dp/B07C7Y4MT9/ref=sr_1_10?dchild=1&keywords=dmx+relay&qid=1626704824&sr=8-10) ... even [flame throwers](https://www.youtube.com/watch?v=jbIG1ijw9Qw)! 
 
  Made with ❤️ for makers, DIY craftsmen, prop makers and professional soundstage designers everywhere
- 
- ## Prerequisites
-There are no other software prerequisites, but you'll need to make sure you have a USB DMX controller.  I recommend the [DMXking ultraDMX micro](https://dmxking.com/usbdmx/ultradmxmicro) -- also available at Amazon.  You should probably also pick up a [few lights](https://www.amazon.com/gp/product/B07DPGPRZ3/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) and at least 1 [3 prong DMX cable](https://www.amazon.com/gp/product/B0885HHY5Q/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1).  
-## Installing
-Installing fxdmx is also really simple.  Grab the .deb file from the [latest release](https://github.com/danesparza/fxdmx/releases/latest) and then install it using dpkg:
 
+## Installation
+### Prerequisites
+Install Raspberry Pi OS (Bookworm or later) on your device. For best results, use the [Raspberry Pi Imager](https://www.raspberrypi.com/software/) and select **Raspberry Pi OS (64-bit)**.
 
-```bash
-sudo dpkg -i fxdmx-1.0.40_armhf.deb 
-````
+Install the prerequisite package repository (one-time setup per machine):
 
-This automatically installs the **fxdmx** service with a default configuration and starts the service. 
+``` bash
+wget https://packages.cagedtornado.com/prereq.sh -O - | sh
+```
+
+### Installing fxdmx
+Install the fxdmx package:
+
+``` bash
+sudo apt install fxdmx
+```
 
 You can then use the service at http://localhost:3040
 
