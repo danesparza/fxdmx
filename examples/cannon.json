@@ -1,0 +1,56 @@
+{
+  "name": "cannon",
+  "frames": [
+    {
+      "type": "scene",
+      "channels": [
+        {
+          "channel": 1,
+          "value": 255
+        },
+        {
+          "channel": 2,
+          "value": 255
+        },
+        {
+          "channel": 3,
+          "value": 80
+        }
+      ]
+    },
+    {
+      "type": "sleep",
+      "sleeptime": 1
+    },
+    {
+      "type": "scene",
+      "channels": [
+        {
+          "channel": 1,
+          "value": 0
+        },
+        {
+          "channel": 2,
+          "value": 255
+        },
+        {
+          "channel": 3,
+          "value": 80
+        }
+      ]
+    },
+    {
+      "type": "fade",
+      "channels": [
+        {
+          "channel": 2,
+          "value": 0
+        },
+        {
+          "channel": 3,
+          "value": 0
+        }
+      ]
+    }
+  ]
+}
