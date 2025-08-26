@@ -3,11 +3,12 @@ package dmx
 import (
 	"context"
 	"fmt"
-	data2 "github.com/danesparza/fxdmx/internal/data"
-	"github.com/danesparza/fxdmx/internal/event"
 	"strings"
 	"sync"
 	"time"
+
+	data2 "github.com/danesparza/fxdmx/internal/data"
+	"github.com/danesparza/fxdmx/internal/event"
 
 	"github.com/akualab/dmx"
 )
@@ -217,9 +218,9 @@ func (bp *BackgroundProcess) StartTimelinePlay(cx context.Context, req PlayTimel
 				wg.Wait()
 
 			case "sleep":
-				//	Just sleep for the specified number of seconds
+				//	Just sleep for the specified number of milliseconds
 				select {
-				case <-time.After(time.Duration(frame.SleepTime) * time.Second):
+				case <-time.After(time.Duration(frame.SleepTime) * time.Millisecond):
 					continue
 				case <-ctx.Done():
 					return
