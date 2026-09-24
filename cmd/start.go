@@ -3,9 +3,11 @@ package cmd
 import (
 	"context"
 	"github.com/danesparza/fxdmx/internal/data"
+	"github.com/danesparza/fxdmx/internal/discovery"
 	"github.com/danesparza/fxdmx/internal/dmx"
 	"github.com/danesparza/fxdmx/internal/event"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -18,6 +20,7 @@ import (
 	_ "github.com/danesparza/fxdmx/docs" // swagger docs location
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	zlog "github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -83,9 +86,11 @@ func start(cmd *cobra.Command, args []string) {
 	}
 
 	//	Trap program exit appropriately
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(cmd.Context())
+	defer cancel()
 	sigs := make(chan os.Signal, 2)
 	signal.Notify(sigs, os.Interrupt, syscall.SIGTERM)
+	defer signal.Stop(sigs)
 	go handleSignals(ctx, sigs, cancel, db, apiService.HistoryTTL)
 
 	//	Log that the system has started:
@@ -151,15 +156,15 @@ func start(cmd *cobra.Command, args []string) {
 		AllowCredentials: true,
 	}).Handler(restRouter)
 
-	//	Format the bound interface:
-	formattedServerInterface := viper.GetString("server.bind")
-	if formattedServerInterface == "" {
-		formattedServerInterface = GetOutboundIP().String()
+	// Bind the API before publishing its discovery advertisement.
+	if err := discovery.ListenAndServe(ctx, net.JoinHostPort(viper.GetString("server.bind"), viper.GetString("server.port")), uiCorsRouter, discovery.Config{
+		Enabled: viper.GetBool("discovery.enabled"),
+		Name:    viper.GetString("discovery.name"),
+		ID:      viper.GetString("discovery.id"),
+		Service: "fxdmx",
+	}); err != nil {
+		zlog.Error().Err(err).Msg("HTTP API service error")
 	}
-
-	//	Start the service and display how to access it
-	log.Printf("[INFO] REST service documentation: http://%s:%s/v1/swagger/\n", formattedServerInterface, viper.GetString("server.port"))
-	log.Printf("[ERROR] %v\n", http.ListenAndServe(viper.GetString("server.bind")+":"+viper.GetString("server.port"), uiCorsRouter))
 }
 
 func handleSignals(ctx context.Context, sigs <-chan os.Signal, cancel context.CancelFunc, db *data.Manager, historyttl time.Duration) {
@@ -181,7 +186,6 @@ func handleSignals(ctx context.Context, sigs <-chan os.Signal, cancel context.Ca
 
 		log.Println("[INFO] Shutting down ...")
 		cancel()
-		os.Exit(0)
 	}
 }
 

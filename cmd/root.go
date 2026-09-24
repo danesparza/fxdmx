@@ -73,6 +73,9 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	//	Set our defaults
+	viper.SetDefault("discovery.enabled", true)
+	viper.SetDefault("discovery.name", "")
+	viper.SetDefault("discovery.id", "")
 	viper.SetDefault("loglevel", "INFO")
 	viper.SetDefault("datastore.system", path.Join(home, "fxdmx", "db", "system.db"))
 	viper.SetDefault("datastore.retentiondays", 30)
