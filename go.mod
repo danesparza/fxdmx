@@ -1,6 +1,6 @@
 module github.com/danesparza/fxdmx
 
-go 1.25.0
+go 1.25.13
 
 require (
 	github.com/akualab/dmx v0.0.0-20130922234952-1ec6837faba7
